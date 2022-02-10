@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const { validateInput } = require("./middleware");
 
 const usersData = [
   {
@@ -25,16 +26,18 @@ router.get("/users", (req, res) => {
   );
 });
 
-router.post("/register", (req, res) => {
-  let { username, password } = req.body;
-  if (!username || !password) {
-    res.status(400).json({ message: "missing username and password" });
-  } else {
-    res.status(201).json({
-      username: username,
-      password: password,
-    });
-  }
+router.post("/register", validateInput, (req, res) => {
+  res.status(201).json({
+    username: req.username,
+    register: "successful",
+  });
+});
+
+router.post("/login", validateInput, (req, res) => {
+  res.status(200).json({
+    username: req.username,
+    login: "successful",
+  });
 });
 
 module.exports = router;
